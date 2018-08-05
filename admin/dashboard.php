@@ -105,7 +105,7 @@
                 <a href="#" data-toggle="modal" data-target="#addcredit" class="list-group-item list-group-item-action bg-dark text-white">
                     <span class="menu-collapsed">Add Credit</span>
                 </a>
-                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
+                <a href="#" id="history" class="list-group-item list-group-item-action bg-dark text-white">
                     <span class="menu-collapsed">Transaction History</span>
                 </a>
                  <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
@@ -216,11 +216,26 @@
         </button>
       </div>
       <div class="modal-body">
-        ...
+        <form>
+            <div class="form-group row">
+                <label for="user" class="col-sm-2 col-form-label">Username: </label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="users" placeholder="Enter username of payee" autocomplete="off" required>
+                    <div class="list-group" id="userlist">        
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Amout</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="amount" placeholder="Amount" required>
+                </div>
+            </div>
+            </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="button" id="topup" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
@@ -244,11 +259,60 @@
 					
 				    });        
              });
+            $('#history').click(function(){
+                    $.ajax({
+					type: "post",
+					url:"../core/records.php",
+                    data:{action:"gethistory"},
+					success: function (returnData){
+						$('#main_panel').html(returnData);		
+					}
+					
+				    });        
+             });
+            $('#topup').click(function(){
+               var topupUser = $('#users').val();
+                var topupAmount =$('#amount').val();
+                alert(topupUser+ " "+topupAmount);
+                $.ajax({
+                    method:"post",
+                    url:"../core/records.php",
+                    data:{action:"topup",user:topupUser,amount:topupAmount},
+					success: function (returnData){
+						$('#main_panel').html(returnData);		
+					}
+                });                
+            });
             
-        });
-       function thisFunction()
+            $('#users').keyup(function(){              
+                var userQuery = $('#users').val();
+                if(userQuery != ''){
+                     $('#userlist').html('getting available users..');
+                    $.ajax({
+                    method:"post",
+                    url:"../core/searchuser.php",
+                    data:{query:userQuery},
+                    success: function(users){
+                        $('#userlist').fadeIn("slow");
+                         $('#userlist').html(users);
+                    }
+                    });
+                }
+            });
+            
+            $('#addcredit').on('shown.bs.modal', function () {
+                $('#users').trigger('focus');
+            });
+            
+            $('#users').focusout(function(){
+                $('#userlist').hide("slow");          
+            });
+                   
+        });   
+       function thisFunction(e)
         {
-            alert("gagag")
+            $('#users').val(e);
+            $('#userlist').hide("slow");
         }
     </script>
 </body>
