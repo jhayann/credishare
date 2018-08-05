@@ -22,7 +22,7 @@ if(isset($_GET['logout']))
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
 
-    <title>Starter Template for Bootstrap</title>
+    <title><?php echo $_SESSION['username']?> - Dashboard</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">

@@ -20,11 +20,9 @@ if(isset($_GET['logout']))
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
 
-    <title>Starter Template for Bootstrap</title>
-
+    <title><?php echo $_SESSION['username']?></title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-
     <!-- Custom styles for this template -->
     <style type="text/css">
         body {
@@ -81,6 +79,7 @@ if(isset($_GET['logout']))
       </div>
     </nav>
 <div class="container">
+<div id="notifier" class="alert alert-danger d-none"></div>
     <div class="jumbotron jumbotron-fluid">
         <div class="container" id="main_container">
            <div id="main_">
@@ -88,6 +87,8 @@ if(isset($_GET['logout']))
            </div>
             <p class="lead">This is your current credits. You  can see your transaction below.</p>
         </div>
+    </div>
+    <div id="history">
     </div>
 </div>
 <!-- /.container -->
@@ -106,9 +107,29 @@ if(isset($_GET['logout']))
                     data:{action:"getcredits",user:username},
                     success: function(response)  {
                         $('#main_').html(response);
-                    }
+                        getmyHistory(username);
+                    },
+                 error: function(){
+                        $('#notifier').removeClass('d-none');
+                 }
             });
         });
+        function getmyHistory(e)
+        {
+            var username = e;
+                 $.ajax({
+                    type:"post",
+                    url:"core/mycredits.php",
+                    data:{action:"gethistory",user:username},
+                    success: function(response)  {
+                        $('#history').html(response);   
+                    },
+                     error: function(){
+                        $('#notifier').removeClass('d-none');
+                 }
+                     
+            });
+        }
     </script>
 </body>
 </html>

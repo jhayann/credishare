@@ -21,7 +21,8 @@ function getrecords($message,$type=null)
         $response ="";
         if(strlen($message) > 4 && $type =="success"){
             $response .= '<div class="alert alert-success" role="alert">'.$message.'</div>';
-        } else {
+        } 
+        if(strlen($message) > 4){
             $response .= '<div class="alert alert-danger" role="alert">'.$message.'</div>';
         }
         $response = $response .'
@@ -53,6 +54,46 @@ function getmyCredits($user)
         echo $response = '<h1 class="display-4" style="font-family:impact;color:green">'.$credits.' Php</h1>';
             $result->free_result();
              $GLOBALS['db']->close();
+}
+function getmyHistory($user)
+{
+    $count=0;
+        $response_data="";
+        $get = $GLOBALS['db']->prepare("SELECT * FROM topup_history WHERE username = ?");
+        $get->bind_param("s",$user);
+        $get->execute();
+        $result = $get->get_result();
+            while($r=$result->fetch_array()) 
+            {
+            $count++;
+            $response_data = $response_data .'
+                      <tr>
+                        <td>'.$r[1].'</td>
+                        <td>'.$r[2].'</td>
+                        <td>'.$r[3].'</td>
+                        <td>'.$r[4].'</td>
+                      </tr>';   
+            }
+    if($response_data<=0){
+        $response_data = '<tr><td colspan="4"> <div class="alert alert-warning">NO RECORDS FOUND </div></td></tr>';
+    }
+        $response ="";
+        $response = $response .'
+                    <table class="table">
+                     <thead class="thead-light">
+                        <tr>
+                          <th scope="col">Username</th>
+                          <th scope="col">Amount</th>
+                          <th scope="col">Date deposit</th>
+                          <th scope="col">Added By</th>
+                        </tr>
+                      </thead>
+                      ';
+        $response .= $response_data;
+        $response .= '</table>';
+        echo $response;  
+    $result->free_result();
+     $GLOBALS['db']->close();
 }
 function getHistory()
 {

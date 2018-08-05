@@ -19,12 +19,9 @@ if(isLogin()==true){
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
-
     <title>CrediShare 1.0</title>
-
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-
     <!-- Custom styles for this template -->
     <style type="text/css">
         body {
@@ -55,8 +52,27 @@ if(isLogin()==true){
                 margin-right: 50px !important;
             }
         }
+        .footer {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 60px; /* Set the fixed height of the footer here */
+          line-height: 60px; /* Vertically center the text there */
+          background-color:darkslategrey;
+            }
+        .text-muted
+        {
+            color:white !important;
+        }
+
         
     </style>
+        <script type="text/javascript">
+            //<![CDATA[ 
+            var tlJsHost = ((window.location.protocol == "https:") ? "https://secure.comodo.com/" : "http://www.trustlogo.com/");
+            document.write(unescape("%3Cscript src='" + tlJsHost + "trustlogo/javascript/trustlogo.js' type='text/javascript'%3E%3C/script%3E"));
+            //]]>
+        </script>
 </head>    
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
@@ -108,6 +124,14 @@ if(isLogin()==true){
         <button class="btn btn-primary btn-block"><a href="register.php">Register</a></button>
     </form>
 </div>
+<footer class="footer">
+      <div class="container">
+        <span class="text-muted">CrediShare System (c) 2018</span>
+     <script language="JavaScript" type="text/javascript">
+        TrustLogo("https://bsit-blog.ezyro.com/comodo_secure_seal_76x26_transp.png", "CL1", "none");
+    </script>
+      </div>
+ </footer>
 <!-- /.container -->
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -128,7 +152,9 @@ if(isLogin()==true){
                  success:function(response){
                      if(response == "true")
                          {
-                            $('#result_auth').html('<div class="alert alert-success">Login success. Please wait</div>');   
+                            $('#result_auth').html('<div class="alert alert-success">' +
+                                                   'Login success. Please wait ' +
+                                                   ' &nbsp;<img src="assets/images/Pacman-1s-96px.svg" style="width:35px;height:35px"></div>');   
                              setTimeout("pageRedirect('true')", 5000);
                          } 
                         else if(response =="admin")
