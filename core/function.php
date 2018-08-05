@@ -2,7 +2,7 @@
 include_once('db.class.php');
 $database = new Database();
 $db = $database->getConnection();
-function getrecords($message)
+function getrecords($message,$type=null)
 {
         $response_data="";
         $get = $GLOBALS['db']->prepare("SELECT * FROM credits");
@@ -19,8 +19,10 @@ function getrecords($message)
                       </tr>';   
             }
         $response ="";
-        if(strlen($message) > 4){
-        $response .= '<div class="alert alert-success" role="alert">'.$message.'</div>';
+        if(strlen($message) > 4 && $type =="success"){
+            $response .= '<div class="alert alert-success" role="alert">'.$message.'</div>';
+        } else {
+            $response .= '<div class="alert alert-danger" role="alert">'.$message.'</div>';
         }
         $response = $response .'
                     <table class="table">
@@ -38,6 +40,19 @@ function getrecords($message)
         echo $response;  
     $result->free_result();
      $GLOBALS['db']->close();
+}
+function getmyCredits($user)
+{
+        $response_data="";
+        $get = $GLOBALS['db']->prepare("SELECT username, available_credits FROM credits WHERE username = ?");
+        $get->bind_param("s",$user);
+        $get->execute();
+        $result = $get->get_result();
+        $credits = $result->fetch_assoc();
+        $credits = $credits['available_credits'];
+        echo $response = '<h1 class="display-4" style="font-family:impact;color:green">'.$credits.' Php</h1>';
+            $result->free_result();
+             $GLOBALS['db']->close();
 }
 function getHistory()
 {
@@ -76,25 +91,35 @@ function getHistory()
 
 function topUp($user, $amount)
 {
-    
-    $data1 =$user;
-    $data2 =(int)$amount;
-    $data3 ="admin";
-    $insert = $GLOBALS['db']->prepare("INSERT INTO topup_history(username,amount,added_by) VALUES(?,?,?)");
-    $insert->bind_param("sis",$data1,$data2,$data3);
-    if($insert->execute()){    
-        $update = $GLOBALS['db']->prepare("UPDATE credits SET available_credits = available_credits + ? WHERE username = ?");
-        $update->bind_param("is",$data2,$data1);
-        if ($update->execute()) {   
-            getrecords("You have successfully topup $data2 to $data1");
-        } else {
-             getrecords("Something went wrong with your request");
-        }
-    
+    if($user == "" &&$amount <1)
+    {
+        getrecords("Something went wrong with your request. You're trying to submit a blank form.");
+        exit();
     } else {
-        getrecords("Something went wrong with your request");
-    }
-    
+        if(checkUser($user) ==false)
+        {
+            getrecords("The username is invalid or dont have an account yet.");
+            exit();
+        } else {
+                 $data1 =$user;
+                $data2 =(int)$amount;
+                $data3 ="admin";
+                $insert = $GLOBALS['db']->prepare("INSERT INTO topup_history(username,amount,added_by) VALUES(?,?,?)");
+                $insert->bind_param("sis",$data1,$data2,$data3);
+                if($insert->execute()){    
+                    $update = $GLOBALS['db']->prepare("UPDATE credits SET available_credits = available_credits + ? WHERE username = ?");
+                    $update->bind_param("is",$data2,$data1);
+                    if ($update->execute()) {   
+                        getrecords("You have successfully topup $data2 to $data1","success");
+                    } else {
+                         getrecords("Something went wrong with your request. Try again.");
+                    }
+
+                } else {
+                    getrecords("Something went wrong with your request. Could not add credit");
+                }
+        }
+    }  
 }
 
 function signUp($username, $studnum, $email, $password_)
@@ -117,6 +142,9 @@ function Auth($user,$pass)
     $userdb = $rec['username'];
     if(password_verify($pass,$rec['password']) && $user==$userdb)
     {
+        session_start();
+        $_SESSION['username'] = $user;
+        $_SESSION['token'] = "12345";
         return true;
     }
     else 
@@ -125,7 +153,23 @@ function Auth($user,$pass)
     }
 }
 
-function recordLog()
+function isLogin()
+{
+    session_start();
+    if(isset($_SESSION['username']) && $_SESSION['token'])
+    {
+       if(checkUser($_SESSION['username']) == true)
+       {
+           return true;
+       } else {
+           return false;
+       }
+    } else {
+        return false;
+    }
+}
+
+function recordLog($user,$activity)
 {
     
 }
@@ -139,10 +183,12 @@ function checkUser($username)
         $c= $res->fetch_assoc();
         $count = $c['count'];
         if($count >= 1){
-            return false;
+            return true; //user exist
         } else {
-        return true;
+        return false; // user not exist
         }
-    }   
+    }
+    $c->free_result();
+   $GLOBALS['db']->close();
 }
 ?>

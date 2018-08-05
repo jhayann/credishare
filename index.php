@@ -1,6 +1,10 @@
 <?php
 $display='d-none';
-$notice='';
+$notice="";
+include_once('core/function.php');
+if(isLogin()==true){
+    header('location:myaccount.php');
+} 
     if(isset($_GET['notice']) && $_GET['notice'] == "signup_success")
     {
         $notice = "You have successfully register.";
@@ -117,7 +121,6 @@ $notice='';
                 e.preventDefault();
             var user = $('#username').val();
             var pass =  $('#password').val();
-                alert(user + " " + pass)
              $.ajax({
                 type:"post",
                  url:"core/account.php",
@@ -125,17 +128,29 @@ $notice='';
                  success:function(response){
                      if(response == "true")
                          {
-                            $('#result_auth').html('<div class="alert alert-success">Login success</div>');   
+                            $('#result_auth').html('<div class="alert alert-success">Login success. Please wait</div>');   
+                             setTimeout("pageRedirect('true')", 5000);
                          } 
-                        else
+                        else if(response =="admin")
                         {
-                           $('#result_auth').html('<div class="alert alert-danger">Invalid Username or Password</div>');     
-                        }
+                           $('#result_auth').html('<div class="alert alert-success">Login success. Redirecting to dashboard</div>');   
+                             setTimeout("pageRedirect('admin')", 5000);                   
+                        } else { $('#result_auth').html('<div class="alert alert-danger">Invalid Username or Password</div>');     }
                  }
              });
               
             });
         });
+        
+         function pageRedirect(e) {
+             var data = e;
+             if( data == "true"){
+            window.location.href = "myaccount.php";
+             } else {
+                   window.location.href = "admin/dashboard.php";
+             }
+            }      
+   
     </script>
 </body>
 </html>

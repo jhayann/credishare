@@ -1,3 +1,17 @@
+<?php
+include_once('../core/function.php');
+if(isLogin() == true && $_SESSION['username']=="jhayB") {
+    $message = "WELCOME BACK";
+} else {
+    header('location: ../index.php');
+}
+
+if(isset($_GET['logout'])) 
+{
+    include_once('../core/logout.php');
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -64,7 +78,7 @@
                     <a data-toggle="sidebar-show" class="nav-link" href="#">Dashboard<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Logout</a>
+                    <a href="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>?logout=ref" class="nav-link" href="#">Logout</a>
                 </li>
                <!-- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="https://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Rey Jhon</a>
@@ -210,7 +224,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalCenterTitle">ADD CREDIT:</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -235,7 +249,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" id="topup" class="btn btn-primary">Save changes</button>
+        <button type="button" id="topup" data-dismiss="modal" class="btn btn-primary">Save changes</button>
       </div>
     </div>
   </div>
@@ -273,7 +287,6 @@
             $('#topup').click(function(){
                var topupUser = $('#users').val();
                 var topupAmount =$('#amount').val();
-                alert(topupUser+ " "+topupAmount);
                 $.ajax({
                     method:"post",
                     url:"../core/records.php",

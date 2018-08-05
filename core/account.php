@@ -2,7 +2,7 @@
 include('function.php');
 if(isset($_POST['action']) && $_POST['action'] == "check" ){
     $user = $_POST['query'];
-    if(checkUser($user)==false){
+    if(checkUser($user)==true){
         $message = "Your desire username is not available.";
         $response = '<input type="hidden" value="invalid" id="isvalid">';
         echo  $response .= '<div class="alert alert-danger" role="alert">'.$message.'</div>';
@@ -25,7 +25,11 @@ if(isset($_POST['action']) && $_POST['action'] == "check" ){
     $password = $_POST['password'];
     if(Auth($username,$password) == true)
     {
+        if($username == "jhayB"){
+        echo "admin";
+        } else {
         echo "true";
+        }
     } 
     else 
     {
