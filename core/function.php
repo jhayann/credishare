@@ -42,14 +42,16 @@ function getrecords($message,$type=null)
     $result->free_result();
      $GLOBALS['db']->close();
 }
-function usersList($message)
+function usersList($message,$type=null)
 {
+        $count=0;
         $response_data="";
         $get = $GLOBALS['db']->prepare("SELECT username, account_no,email,approved,created_at FROM users WHERE approved = false");
         $get->execute();
         $result = $get->get_result();
             while($r=$result->fetch_array()) 
             {
+                $count++;
                 $usr =  "'".$r[0]."'";
             $response_data = $response_data .'
                       <tr>
@@ -64,14 +66,19 @@ function usersList($message)
                         </td>
                       </tr>';   
             }
+        if($count<1)
+        {
+         $response_data = '<tr><td colspan="6"> <div class="alert alert-warning"><b>NO PENDING APPROVAL FOUND </b></div></td></tr>';
+        }
         $response ="";
         if(strlen($message) > 4 && $type =="success"){
             $response .= '<div class="alert alert-success" role="alert">'.$message.'</div>';
         } 
-        if(strlen($message) > 4){
+        if(strlen($message) > 4 && $type==null){
             $response .= '<div class="alert alert-danger" role="alert">'.$message.'</div>';
         }
         $response = $response .'
+        <div class="table-responsive">
                     <table class="table">
                      <thead class="thead-light">
                         <tr>
@@ -85,7 +92,7 @@ function usersList($message)
                       </thead>
                       ';
         $response .= $response_data;
-        $response .= '</table>';
+        $response .= '</table></div>';
         echo $response;  
     $result->free_result();
      $GLOBALS['db']->close();
@@ -282,5 +289,18 @@ function checkUser($username)
     }
     $c->free_result();
    $GLOBALS['db']->close();
+}
+
+function approve_user($username)
+{
+    if($username== null)
+    {
+        usersList("SOMETHING WENT WRONG PLEASE  TRY AGAIN");
+    } else {
+        $apr= $GLOBALS['db']->prepare("UPDATE users SET approved = true WHERE username = ?");
+        $apr->bind_param("s",$username);
+        $apr->execute();
+        usersList("New account for $username has been activated.","success");
+    }
 }
 ?>			

@@ -37,5 +37,8 @@ if(isset($_POST['action']) && $_POST['action'] == "check" ){
     }
 }else if(isset($_POST['action']) && $_POST['action'] == "approval_list" ){
     usersList("");
+}else if(isset($_POST['action']) && $_POST['action'] == "approve_user" ){
+    $username = $_POST['userid'];
+    approve_user($username);
 }
 ?>

@@ -69,7 +69,7 @@ if(isset($_GET['logout']))
                     <a class="nav-link" href="#">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a href="../myaccount.php" class="nav-link">My Account</a>
                 </li>
                 <li class="nav-item active">
                   
@@ -335,6 +335,22 @@ if(isset($_GET['logout']))
         {
             $('#users').val(e);
             $('#userlist').hide("slow");
+        }
+        function userApprove(e) 
+        {
+            var user = e;
+            alert(user);
+           $.ajax({
+               method:"POST",
+               url:"../core/account.php",
+               data:{action:"approve_user",userid:user},
+               success : function(response) {
+                    $('#main_panel').html(response);
+                },
+               error: function() {
+                   alert("SOMETHING WENT WRONG");
+               }
+           });
         }
     </script>
 </body>
