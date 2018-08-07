@@ -22,7 +22,7 @@ function getrecords($message,$type=null)
         if(strlen($message) > 4 && $type =="success"){
             $response .= '<div class="alert alert-success" role="alert">'.$message.'</div>';
         } 
-        if(strlen($message) > 4){
+        if(strlen($message) > 4 && $type==null){
             $response .= '<div class="alert alert-danger" role="alert">'.$message.'</div>';
         }
         $response = $response .'
@@ -45,7 +45,7 @@ function getrecords($message,$type=null)
 function usersList($message)
 {
         $response_data="";
-        $get = $GLOBALS['db']->prepare("SELECT username, account_no,email,approved FROM users WHERE approved = false");
+        $get = $GLOBALS['db']->prepare("SELECT username, account_no,email,approved,created_at FROM users WHERE approved = false");
         $get->execute();
         $result = $get->get_result();
             while($r=$result->fetch_array()) 
@@ -57,6 +57,7 @@ function usersList($message)
                         <th scope="row">'.$r[1].'</th>
                         <td>'.$r[2].'</td>
                         <td>'.$r[3].'</td>
+                        <td>'.$r[4].'</td>
                         <td>
                         <button onclick="userApprove('.$usr.')" class="btn btn-success">approve</button>
                         <button onclick="userApprove('.$usr.')" class="btn btn-danger">decline</button>
@@ -78,6 +79,7 @@ function usersList($message)
                           <th scope="col">Account</th>
                           <th scope="col">Email</th>
                           <th scope="col">type</th>
+                          <th scope="col">Signup date</th>
                           <th scope="col">Action</th>
                         </tr>
                       </thead>
@@ -114,13 +116,12 @@ function getmyHistory($user)
             $count++;
             $response_data = $response_data .'
                       <tr>
-                        <td>'.$r[1].'</td>
                         <td>'.$r[2].'</td>
                         <td>'.$r[3].'</td>
                         <td>'.$r[4].'</td>
                       </tr>';   
             }
-    if($response_data<=0){
+    if($count<=0){
         $response_data = '<tr><td colspan="4"> <div class="alert alert-warning">NO RECORDS FOUND </div></td></tr>';
     }
         $response ="";
@@ -128,10 +129,9 @@ function getmyHistory($user)
                     <table class="table">
                      <thead class="thead-light">
                         <tr>
-                          <th scope="col">Username</th>
                           <th scope="col">Amount</th>
-                          <th scope="col">Date deposit</th>
-                          <th scope="col">Added By</th>
+                          <th scope="col">Date </th>
+                          <th scope="col">By</th>
                         </tr>
                       </thead>
                       ';
@@ -178,9 +178,9 @@ function getHistory()
 
 function topUp($user, $amount)
 {
-    if($user == "" &&$amount <1)
+    if($user == "" || $amount < 4)
     {
-        getrecords("Something went wrong with your request. You're trying to submit a blank form.");
+        getrecords("Something went wrong with your request. You're trying to submit invalid/blank form.");
         exit();
     } else {
         if(checkUser($user) ==false)
@@ -188,14 +188,15 @@ function topUp($user, $amount)
             getrecords("The username is invalid or dont have an account yet.");
             exit();
         } else {
+              session_start();
                  $data1 =$user;
                 $data2 =(int)$amount;
-                $data3 ="admin";
+                $data3 = "admin-".$_SESSION['username'];
                 $insert = $GLOBALS['db']->prepare("INSERT INTO topup_history(username,amount,added_by) VALUES(?,?,?)");
                 $insert->bind_param("sis",$data1,$data2,$data3);
                 if($insert->execute()){    
-                    $update = $GLOBALS['db']->prepare("UPDATE credits SET available_credits = available_credits + ? WHERE username = ?");
-                    $update->bind_param("is",$data2,$data1);
+                    $update = $GLOBALS['db']->prepare("UPDATE credits SET available_credits= available_credits + ?, added_by = ? WHERE username = ?");
+                    $update->bind_param("iss",$data2,$data3,$data1);
                     if ($update->execute()) {   
                         getrecords("You have successfully topup $data2 to $data1","success");
                     } else {
@@ -214,14 +215,17 @@ function signUp($username, $studnum, $email, $password_)
      $sign = $GLOBALS['db']->prepare("INSERT INTO users(username,account_no,email,password) VALUES(?,?,?,?)");
     $sign->bind_param("siss",$username, $studnum, $email, $password_);
     $sign->execute();
-    header('location:../credits/index.php?notice=signup_success&user='.$username);
+    $again =  $GLOBALS['db']->prepare("INSERT INTO credits(username) VALUES(?)");
+    $again->bind_param("s",$username);
+    $again->execute();
+    header('location:index.php?notice=signup_success&user='.$username);
     $GLOBALS['db']->close();
 }
 
 function Auth($user,$pass)
 {
     
-    $auth = $GLOBALS['db']->prepare("SELECT username, password,approved FROM users WHERE username = ? LIMIT 0,1");
+    $auth = $GLOBALS['db']->prepare("SELECT username, password, approved FROM users WHERE username = ? LIMIT 0,1");
     $auth->bind_param("s",$user);
     $auth->execute();
     $res = $auth->get_result();
@@ -232,7 +236,7 @@ function Auth($user,$pass)
         session_start();
         $_SESSION['username'] = $user;
         $_SESSION['token'] = "12345";
-        $_SESSION['approved'] = $rec['approved'];
+        $_SESSION['approved'] = $rec['approved'];   
         return true;
     }
     else 
@@ -279,4 +283,4 @@ function checkUser($username)
     $c->free_result();
    $GLOBALS['db']->close();
 }
-?>
+?>			

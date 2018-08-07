@@ -26,14 +26,14 @@ if(isset($_POST['action']) && $_POST['action'] == "check" ){
     if(Auth($username,$password) == true)
     {
         if($username == "jhayB"){
-        echo 1;
+           echo json_encode(1);
         } else {
-        echo 2;
+          echo json_encode(2);
         }
     } 
     else 
     {
-        echo 3;
+        echo json_encode(3);
     }
 }else if(isset($_POST['action']) && $_POST['action'] == "approval_list" ){
     usersList("");
