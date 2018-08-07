@@ -208,6 +208,7 @@ if(isset($_GET['logout']))
         <div class="card">
             <h4 class="card-header">Control Panel * Admin - <?php echo $_SESSION['username']?></h4>
             <div class="card-body" id="main_panel">
+               <div class="notifier"></div>
                 
             </div>
            
@@ -258,100 +259,7 @@ if(isset($_GET['logout']))
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
     <script src="../assets/js/app.js"></script>
-    <script>
-        $(document).ready(function(){
-            $('#records').click(function(){
-                    $.ajax({
-					type: "post",
-					url:"../core/records.php",
-                    data:{action:"getrecords"},
-					success: function (returnData){
-						$('#main_panel').html(returnData);		
-					}
-					
-				    });        
-             });
-            $('#history').click(function(){
-                    $.ajax({
-					type: "post",
-					url:"../core/records.php",
-                    data:{action:"gethistory"},
-					success: function (returnData){
-						$('#main_panel').html(returnData);		
-					}
-					
-				    });        
-             });
-            $('#topup').click(function(){
-               var topupUser = $('#users').val();
-                var topupAmount =$('#amount').val();
-                $.ajax({
-                    method:"post",
-                    url:"../core/records.php",
-                    data:{action:"topup",user:topupUser,amount:topupAmount},
-					success: function (returnData){
-						$('#main_panel').html(returnData);		
-					}
-                });                
-            });
-            
-            $('#users').keyup(function(){              
-                var userQuery = $('#users').val();
-                if(userQuery != ''){
-                     $('#userlist').html('getting available users..');
-                    $.ajax({
-                    method:"post",
-                    url:"../core/searchuser.php",
-                    data:{query:userQuery},
-                    success: function(users){
-                        $('#userlist').fadeIn("slow");
-                         $('#userlist').html(users);
-                    }
-                    });
-                }
-            });
-            
-            $('#users_approval').click(function() {
-                  $.ajax({
-                    method:"post",
-                    url:"../core/account.php",
-                    data:{action:"approval_list"},
-                    success: function(response){
-                      $('#main_panel').html(response);
-                    }
-                  });
-            });
-            
-            $('#addcredit').on('shown.bs.modal', function () {
-                $('#users').trigger('focus');
-            });
-            
-            $('#users').focusout(function(){
-                $('#userlist').hide("slow");          
-            });
-                   
-        });   
-       function thisFunction(e)
-        {
-            $('#users').val(e);
-            $('#userlist').hide("slow");
-        }
-        function userApprove(e) 
-        {
-            var user = e;
-           $.ajax({
-               method:"POST",
-               url:"../core/account.php",
-               data:{action:"approve_user",userid:user},
-               success : function(response) {
-                    $('#main_panel').html(response);
-                },
-               error: function() {
-                   alert("SOMETHING WENT WRONG");
-               }
-           });
-        }
-    </script>
+    <script src="../assets/js/dashboard.controller.js"></script>
 </body>
 
 </html>

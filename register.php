@@ -21,19 +21,12 @@ include('core/account.php');
             padding-top: 5rem;
             margin:0;
             font-family: helvitica;
+            display: block;
         }
         a
         {
             text-decoration: none;
-            color: white;
         }
-        a:hover
-        {
-            color: white;
-            text-decoration: none;
-            display:block;
-        }
-        
         @media(min-width:750px){
             .loginform
             {
@@ -105,9 +98,46 @@ include('core/account.php');
             <label for="exampleInputPassword1">Confirm Password</label>
             <input type="password" class="form-control" name="password2" id="password2" placeholder="Re Enter password">
         </div>
+        <div class="form-group container">
+          <input type="checkbox" class="form-check-input" id="terms" checked>
+            <label class="form-check-label" for="exampleCheck1">By clicking Signup, You agree to our <a href="#terms" data-toggle="modal" data-target="#exampleModal">Terms and Conditions.</a></label>
         <button type="submit" class="btn btn-primary btn-block">Signup</button>
+        </div>
     </form>
-
+</div>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Terms and Conditions</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <b>Tagalog translated:</b><br>
+          1. Bago ka sumali dito, Dapat basain mong mabuti lahat ng mga sumusunod.<br>
+          2. Ang website na ito ay para sa mga gustong mga ipon ng pera pang walwal. haha<br>
+          3. Lahat ng members ay hindi obligadong maghulo araw araw.<br>
+          4. Kahit magkano ang ihuhulog mong pera, basta ito ay hindi baba sa "Limang Piso".<br>
+          5. Ang admin ang siya lamang makakapaglagay ng credits sa iyong account.<br>
+          6. Kung ikaw naman ay nangangailangan ng pera at gusto mong mag withdraw, i click
+          mo lamang ang "Cash Request" sa iyong menu upang maproccess ito agad.<br>
+          7. Ang iyong na claim after withdraw  ay mababawas sa iyong account credits.<br>
+          8. Kung mag wiwithdraw ka ng mas mataas o lagpas ng iyong available credits(CreditLoan). Kailangan mong ibalik ang  excess credits ng iyong na withdaw + 5% interest ng total ng nakuha mong pera. <br><br>
+          Example:<br>
+          kung ikaw ay ma available credits na 500 Php . at ikaw ay nagsubmit ng application for CreditLoan na may halagang 1000 .. Kailangan mong ibalik ang 500 na utang mo sa Credishare + 5% ng Creditloan mo(50php). Sa makatuwid ang kailangan mong ibalik na pera ay 550 pesos. Nasa iyo na kung nais mo pading magpatuloy ang paghulog para mkaipon ulit.<br><br>
+        
+          9. Makukuha mo lamang ang iyong CreditLoan kung ang ibang members ng CrediShare ay nag approve sa iyong application.<br>
+          10. Lahat ng members na nag approve ng isang CreditLoan ay maghahati-hati sa 5% interest cash back, at madadagdag ito sa kanilang credits.<br>
+          11. Kung may nais  kayong idagdag sa ating patakaran ay maaring mag send ng message gamit ang ating website. Maraming salamat po.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
 </div>
 <!-- /.container -->
     <!-- Bootstrap core JavaScript
@@ -143,7 +173,8 @@ include('core/account.php');
                var isvalid = $('#isvalid').val();
                 var p1 = $('#password1').val();
                  var p2 = $('#password2').val();
-                if(isvalid == "valid" && p1==p2){
+                var chk = $('#terms').is(":checked");
+                if(isvalid == "valid" && p1==p2 && chk == true){
                   
                     return true;
                 } else {
