@@ -1,6 +1,6 @@
 <?php
 include_once('../core/function.php');
-if(isLogin() == true && $_SESSION['username']=="jhayB") {
+if(isLogin() == true && isAdmin($_SESSION['username']) == true) {
     $message = "WELCOME BACK";
 } else {
     header('location: ../index.php');
@@ -206,7 +206,7 @@ if(isset($_GET['logout']))
 
 
         <div class="card">
-            <h4 class="card-header">Control Panel</h4>
+            <h4 class="card-header">Control Panel * Admin - <?php echo $_SESSION['username']?></h4>
             <div class="card-body" id="main_panel">
                 
             </div>
@@ -339,7 +339,6 @@ if(isset($_GET['logout']))
         function userApprove(e) 
         {
             var user = e;
-            alert(user);
            $.ajax({
                method:"POST",
                url:"../core/account.php",

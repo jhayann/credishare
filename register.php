@@ -148,7 +148,9 @@ include('core/account.php');
                     return true;
                 } else {
                     $('#response').fadeIn("slow");
-                    $('#response').html('<div class="alert alert-danger" role="alert"> Please try again. validate your form.</div>');
+                    $('#response').html('<div class="alert alert-danger" role="alert">' +
+                                        '<input type="hidden" value="valid" id="isvalid">'+
+                                        'Please try again. validate your form.</div>');
                      
                     if(p1!=p2){
                         $('#password1').addClass('is-invalid');

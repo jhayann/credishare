@@ -193,54 +193,6 @@ if(isLogin()==true){
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="assets/js/bootstrap.min.js"></script>
-    <script>
-        $(document).ready(function(){
-          $('.alert').delay(4000).fadeOut('slow');
-            $('#auth').submit(function(e){
-                e.preventDefault();
-            var user = $('#username').val();
-            var pass =  $('#password').val();
-             $.ajax({
-                type:"post",
-                 url:"core/account.php",
-                 data:{action:"auth",username:user,password:pass},
-                 cache: false,
-                 success:function(response){
-                     if($.parseJSON(response) =="2")
-                         {
-                            $('#result_auth').html('<div class="alert alert-success">' +
-                                                   'Login success. Please wait ' +
-                                                   ' &nbsp;<img src="assets/images/Pacman-1s-96px.svg" style="width:35px;height:35px"></div>');   
-                                              $('#result_auth').show();
-                      setTimeout("pageRedirect('true')", 5000);
-                         } 
-                        else if($.parseJSON(response) =="1")
-                        {
-                           $('#result_auth').html('<div class="alert alert-success">Login success. Redirecting to dashboard</div>');   
-                             $('#result_auth').show();
-                       setTimeout("pageRedirect('admin')", 5000);                   
-                        } else if($.parseJSON(response) =="3")
-                        {
-                     
-                        $('#result_auth').html('<div class="alert alert-danger">Invalid Username or Password</div>');  
-                        $('#result_auth').show();
-    $('#result_auth').delay(4000).fadeOut('slow');
-                        }
-                 }
-             });
-              
-            });
-        });
-        
-         function pageRedirect(e) {
-             var data = e;
-             if( data == "true"){
-            window.location.href = "myaccount.php";
-             } else {
-                   window.location.href = "admin/dashboard.php";
-             }
-            }      
-   
-    </script>
+    <script src="assets/js/index.js"></script>
 </body>
 </html>			

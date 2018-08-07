@@ -182,7 +182,6 @@ function getHistory()
     $result->free_result();
      $GLOBALS['db']->close();
 }
-
 function topUp($user, $amount)
 {
     if($user == "" || $amount < 4)
@@ -216,7 +215,6 @@ function topUp($user, $amount)
         }
     }  
 }
-
 function signUp($username, $studnum, $email, $password_)
 {
      $sign = $GLOBALS['db']->prepare("INSERT INTO users(username,account_no,email,password) VALUES(?,?,?,?)");
@@ -228,7 +226,6 @@ function signUp($username, $studnum, $email, $password_)
     header('location:index.php?notice=signup_success&user='.$username);
     $GLOBALS['db']->close();
 }
-
 function Auth($user,$pass)
 {
     
@@ -251,7 +248,6 @@ function Auth($user,$pass)
         return false;
     }
 }
-
 function isLogin()
 {
     session_start();
@@ -267,12 +263,10 @@ function isLogin()
         return false;
     }
 }
-
 function recordLog($user,$activity)
 {
     
 }
-
 function checkUser($username)
 {
     $ch= $GLOBALS['db']->prepare("SELECT count(username) as count FROM users WHERE username = ?");
@@ -290,7 +284,19 @@ function checkUser($username)
     $c->free_result();
    $GLOBALS['db']->close();
 }
-
+function isAdmin($username)
+{
+    $admins = array('jhayB','reyjhon','jhayann');
+    foreach($admins as $admin)
+    {
+        if($admin == $username) 
+        {
+            return true;
+            exit();
+        }
+    }
+    unset($admin);
+}
 function approve_user($username)
 {
     if($username== null)
@@ -303,4 +309,6 @@ function approve_user($username)
         usersList("New account for $username has been activated.","success");
     }
 }
+
+
 ?>			

@@ -72,6 +72,9 @@ if(isset($_GET['logout']))
           <li class="nav-item active">
             <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
           </li>
+           <li class="nav-item">
+            <a class="nav-link" href="#">Notifications</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="admin/dashboard.php">Dashboard</a>
           </li>
