@@ -10,7 +10,6 @@ if(isset($_GET['logout']))
 {
     include_once('../core/logout.php');
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +19,7 @@ if(isset($_GET['logout']))
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
+    <link rel="icon" href="assets/images/pacman.ico">
 
     <title><?php echo $_SESSION['username']?> - Dashboard</title>
 
@@ -35,7 +34,6 @@ if(isset($_GET['logout']))
             margin: 0;
             font-family: helvitica;
         }
-
         #wrapper {
             text-decoration: none;
             color: black;
@@ -153,8 +151,8 @@ if(isset($_GET['logout']))
                 <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
                     <span class="menu-collapsed">Cash Request</span>
                 </a>
-                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
-                    <span class="menu-collapsed">Password</span>
+                <a href="#users" id="users_approval" class="list-group-item list-group-item-action bg-dark text-white">
+                    <span class="menu-collapsed">Users Approval</span>
                 </a>
             </div>
             <!-- Separator with title -->
@@ -311,6 +309,17 @@ if(isset($_GET['logout']))
                     }
                     });
                 }
+            });
+            
+            $('#users_approval').click(function() {
+                  $.ajax({
+                    method:"post",
+                    url:"../core/account.php",
+                    data:{action:"approval_list"},
+                    success: function(response){
+                      $('#main_panel').html(response);
+                    }
+                  });
             });
             
             $('#addcredit').on('shown.bs.modal', function () {

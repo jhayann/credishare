@@ -16,9 +16,9 @@ if(isLogin()==true){
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
+   <meta property="og:title" content="CrediShare" />
+    <meta property="og:description" content="Join CrediShare now"/>
+         <link rel="icon" href="assets/images/pacman.ico">
     <title>CrediShare 1.0</title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -106,13 +106,18 @@ if(isLogin()==true){
     </nav>
 
 <div class="loginform container">
+  <div class="card">
+  <div class="card-body">
+   <h2> Welcome to CrediShare. Start you  account now</h2>
+  </div>
+</div>
    <div class="alert alert-success <?php echo $display?>"><?php echo $notice ?></div>
 <form method="POST" id ="auth" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']);?>">
        <div id="result_auth"></div>
         <div class="form-group">
             <label for="exampleInputEmail1">Email address or Username</label>
             <input type="text" class="form-control" id="username" aria-describedby="emailHelp" value="<?php echo $val=(isset($_GET['user']))?$_GET['user']:''?>" placeholder="Username">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            <small id="emailHelp" class="form-text text-muted" style="color:#dee0e2 !important;">We'll never share your email with anyone else.</small>
         </div>
         <div class="form-group">
             <label for="exampleInputPassword1">Password</label>
@@ -150,18 +155,21 @@ if(isLogin()==true){
                  url:"core/account.php",
                  data:{action:"auth",username:user,password:pass},
                  success:function(response){
-                     if(response == "true")
+                     if($.trim(response) == "2")
                          {
                             $('#result_auth').html('<div class="alert alert-success">' +
                                                    'Login success. Please wait ' +
                                                    ' &nbsp;<img src="assets/images/Pacman-1s-96px.svg" style="width:35px;height:35px"></div>');   
                              setTimeout("pageRedirect('true')", 5000);
                          } 
-                        else if(response =="admin")
+                        else if($.trim(response)=="1")
                         {
                            $('#result_auth').html('<div class="alert alert-success">Login success. Redirecting to dashboard</div>');   
                              setTimeout("pageRedirect('admin')", 5000);                   
-                        } else { $('#result_auth').html('<div class="alert alert-danger">Invalid Username or Password</div>');     }
+                        } else  if($.trim(response)=="3")
+                        { 
+                            $('#result_auth').html('<div class="alert alert-danger">Invalid Username or Password</div>');    
+                        }
                  }
              });
               
@@ -179,4 +187,4 @@ if(isLogin()==true){
    
     </script>
 </body>
-</html>
+</html>			

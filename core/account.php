@@ -26,16 +26,16 @@ if(isset($_POST['action']) && $_POST['action'] == "check" ){
     if(Auth($username,$password) == true)
     {
         if($username == "jhayB"){
-        echo "admin";
+        echo 1;
         } else {
-        echo "true";
+        echo 2;
         }
     } 
     else 
     {
-        echo "false";
+        echo 3;
     }
+}else if(isset($_POST['action']) && $_POST['action'] == "approval_list" ){
+    usersList("");
 }
-
-
 ?>

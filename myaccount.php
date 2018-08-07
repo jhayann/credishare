@@ -2,6 +2,15 @@
 include_once('core/function.php');
 if(isLogin() == true) {
     $message = "WELCOME BACK";
+    
+    if($_SESSION['approved']==0)
+    {
+        $class="";
+        $notifier = "YOUR ACCOUNT IS NOT YET ACTIVATED AND WAITING FOR  APPROVAL";
+    } else {
+        $class = 'd-none';
+        $notifier="";
+    }
 } else {
     header('location: index.php');
 }
@@ -18,7 +27,7 @@ if(isset($_GET['logout']))
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../../../favicon.ico">
+     <link rel="icon" href="assets/images/pacman.ico">
 
     <title><?php echo $_SESSION['username']?></title>
     <!-- Bootstrap core CSS -->
@@ -53,7 +62,7 @@ if(isset($_GET['logout']))
 </head>    
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-      <a class="navbar-brand" href="#">Credishare</a>
+      <a class="navbar-brand" href="#">Credishare - <?php echo $_SESSION['username'] ?></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -79,7 +88,7 @@ if(isset($_GET['logout']))
       </div>
     </nav>
 <div class="container">
-<div id="notifier" class="alert alert-danger d-none"></div>
+<div id="notifier" class="alert alert-danger <?php echo $class?>"><?php echo $notifier ?></div>
     <div class="jumbotron jumbotron-fluid">
         <div class="container" id="main_container">
            <div id="main_">
@@ -89,6 +98,7 @@ if(isset($_GET['logout']))
         </div>
     </div>
     <div id="history">
+        <div class="alert alert-info">Plese wait. We're working on your records</div>
     </div>
 </div>
 <!-- /.container -->
