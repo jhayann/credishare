@@ -11,10 +11,10 @@ class Config
 class Database{
   
     // specify your own database credentials
-    private $host = "sql306.ezyro.com";
-    private $db_name = "ezyro_22454513_creditsdb";
-    private $username = "ezyro_22454513";
-    private $password = "Passmein07";
+    private $host = "localhost";
+    private $db_name = "credits_db";
+    private $username = "root";
+    private $password = "";
     public $conn;
   
     // get the database connection

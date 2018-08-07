@@ -22,6 +22,8 @@ if(isLogin()==true){
     <title>CrediShare 1.0</title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="assets/css/Footer-with-logo-button.css">
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
     <!-- Custom styles for this template -->
     <style type="text/css">
         body {
@@ -52,20 +54,25 @@ if(isLogin()==true){
                 margin-right: 50px !important;
             }
         }
-        .footer {
-          position: absolute;
-          bottom: 0;
-          width: 100%;
-          height: 60px; /* Set the fixed height of the footer here */
-          line-height: 60px; /* Vertically center the text there */
-          background-color:darkslategrey;
-            }
         .text-muted
         {
             color:white !important;
         }
-
-        
+         .loginform
+         {
+         padding-bottom:100px;
+         }
+        .btn{
+        margin-top:6px;
+        }
+          div.trust{
+         max-height:80px;
+        }
+        .social-networks
+        {
+        pointer-events:none;
+        }
+        .cont{padding:10lx;}
     </style>
         <script type="text/javascript">
             //<![CDATA[ 
@@ -108,7 +115,11 @@ if(isLogin()==true){
 <div class="loginform container">
   <div class="card">
   <div class="card-body">
-   <h2> Welcome to CrediShare. Start you  account now</h2>
+   <h2> Welcome to CrediShare. Start you  account now. 
+ <!-- <script language="JavaScript" type="text/javascript">
+        TrustLogo("https://bsit-blog.ezyro.com/comodo_secure_seal_76x26_transp.png", "CL1", "none");
+    </script> -->
+</h2>
   </div>
 </div>
    <div class="alert alert-success <?php echo $display?>"><?php echo $notice ?></div>
@@ -125,18 +136,56 @@ if(isLogin()==true){
         </div>
 
         <button type="submit" class="btn btn-primary btn-block">Login</button>
-
-        <button class="btn btn-primary btn-block"><a href="register.php">Register</a></button>
-    </form>
+</form>
+<a href="register.php">
+        <button class="btn btn-primary btn-block">Register</button></a>
+    
 </div>
-<footer class="footer">
-      <div class="container">
-        <span class="text-muted">CrediShare System (c) 2018</span>
-     <script language="JavaScript" type="text/javascript">
-        TrustLogo("https://bsit-blog.ezyro.com/comodo_secure_seal_76x26_transp.png", "CL1", "none");
-    </script>
-      </div>
- </footer>
+
+   <footer id="myFooter">
+        <div class="container">
+            <div class="row justify-content-md-center">
+                <div class="col-md-auto">
+                    <h2 class="logo"><a href="#"> LOGO </a></h2>
+                </div>
+                <div class="col-md-auto">
+                    <h5>Get started</h5>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Sign up</a></li>
+                        <li><a href="#">Downloads</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-auto">
+                    <h5>About us</h5>
+                    <ul>
+                        <li><a href="#">Company Information</a></li>
+                        <li><a href="#">Contact us</a></li>
+                        <li><a href="#">Reviews</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-auto">
+                    <h5>Support</h5>
+                    <ul>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Help desk</a></li>
+                        <li><a href="#">Forums</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-auto">
+                    <div class="social-networks">
+                        <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+                        <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+                        <a href="#" class="google"><i class="fa fa-google-plus"></i></a>
+                    </div>
+                    <button type="button" class="btn btn-default">Contact us</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2018 CrediShare System</p>
+        </div>
+    </footer>
 <!-- /.container -->
     <!-- Bootstrap core JavaScript
     ================================================== -->
@@ -146,6 +195,7 @@ if(isLogin()==true){
     <script src="assets/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function(){
+          $('.alert').delay(4000).fadeOut('slow');
             $('#auth').submit(function(e){
                 e.preventDefault();
             var user = $('#username').val();
@@ -154,21 +204,27 @@ if(isLogin()==true){
                 type:"post",
                  url:"core/account.php",
                  data:{action:"auth",username:user,password:pass},
+                 cache: false,
                  success:function(response){
-                     if($.trim(response) == "2")
+                     if($.parseJSON(response) =="2")
                          {
                             $('#result_auth').html('<div class="alert alert-success">' +
                                                    'Login success. Please wait ' +
                                                    ' &nbsp;<img src="assets/images/Pacman-1s-96px.svg" style="width:35px;height:35px"></div>');   
-                             setTimeout("pageRedirect('true')", 5000);
+                                              $('#result_auth').show();
+                      setTimeout("pageRedirect('true')", 5000);
                          } 
-                        else if($.trim(response)=="1")
+                        else if($.parseJSON(response) =="1")
                         {
                            $('#result_auth').html('<div class="alert alert-success">Login success. Redirecting to dashboard</div>');   
-                             setTimeout("pageRedirect('admin')", 5000);                   
-                        } else  if($.trim(response)=="3")
-                        { 
-                            $('#result_auth').html('<div class="alert alert-danger">Invalid Username or Password</div>');    
+                             $('#result_auth').show();
+                       setTimeout("pageRedirect('admin')", 5000);                   
+                        } else if($.parseJSON(response) =="3")
+                        {
+                     
+                        $('#result_auth').html('<div class="alert alert-danger">Invalid Username or Password</div>');  
+                        $('#result_auth').show();
+    $('#result_auth').delay(4000).fadeOut('slow');
                         }
                  }
              });
