@@ -311,8 +311,22 @@ function approve_user($username)
 }
 function users_chart()
 {
-    $q = sprintf("SELECT username, available_credits FROM credits ORDER by available_credits DESC LIMIT 0,5 ");
-    $results = $GLOBALS['db']->query($q);
+$get=$GLOBALS['db']->prepare("SELECT username, available_credits FROM credits ORDER by available_credits DESC LIMIT 0,5 ");
+ $get->execute();
+    $results=$get->get_result();
+    $data = array();
+    foreach ($results as $row) {
+        $data[] = $row;
+        }
+   print json_encode($data);
+    $GLOBALS['db']->close();
+}
+function myhistoryChart($user)
+{
+$get=$GLOBALS['db']->prepare("SELECT DATE_FORMAT(date_added,'%b %d') as date, amount FROM topup_history WHERE username = ? ORDER by date_added DESC LIMIT 0,10");
+$get->bind_param("s",$user);
+ $get->execute();
+$results = $get->get_result();
     $data = array();
     foreach ($results as $row) {
         $data[] = $row;

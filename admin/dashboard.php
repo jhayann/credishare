@@ -26,7 +26,7 @@ if(isset($_GET['logout']))
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/app.css">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="../vendor/fontawesome-free/css/all.min.css">
     <!-- Custom styles for this template -->
     <style type="text/css">
         body {
@@ -104,7 +104,7 @@ if(isset($_GET['logout']))
             <!-- Menu with submenu -->
             <a href="#submenu1" data-toggle="collapse" aria-expanded="false" class="bg-dark list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-start align-items-center">
-                    <span class="fa fa-dashboard fa-fw mr-3"></span>
+                    <i class="fas fa-tachometer-alt  mr-3"></i>
                     <span class="menu-collapsed">Dashboard</span>
                     <span class="submenu-icon ml-auto"></span>
                 </div>
@@ -168,7 +168,7 @@ if(isset($_GET['logout']))
             </a>
             <a href="#" class="bg-dark list-group-item list-group-item-action">
                 <div class="d-flex w-100 justify-content-start align-items-center">
-                    <span class="fa fa-envelope-o fa-fw mr-3"></span>
+                    <span class="fa fa-envelope fa-fw mr-3"></span>
                     <span class="menu-collapsed">Messages <span class="badge badge-pill badge-primary ml-2">5</span></span>
                 </div>
             </a>
@@ -197,7 +197,7 @@ if(isset($_GET['logout']))
     <!-- sidebar-container END -->
 
     <!-- MAIN -->
-    <div class="col">
+    <div class="col" style="max-width:80%">
 
         <h1>
             CrediShare
@@ -211,7 +211,7 @@ if(isset($_GET['logout']))
     </h4>
     <div class="card-body" id="main_panel">
         <div class="notifier"></div>
-        <div class="col-lg-11">
+        <div class="d-block">
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-chart-bar"></i>Users with most credits</div>
@@ -269,65 +269,8 @@ if(isset($_GET['logout']))
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
     <script src="../assets/js/app.js"></script>
-    <script src="../assets/js/dashboard.controller.js"></script>
-    <script src="../vendor/chart.js/Chart.min.js"></script>
-    <script>
-        Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-Chart.defaults.global.defaultFontColor = '#292b2c';
-        $(document).ready(function(){
-                $.ajax({
-                    url:"../core/chart.php",
-                    method:"POST",
-                    data:{action:"users_chart"},
-                    success: function(data){
-                        var users = [];
-			             var credit = [];
-                        var e = $.parseJSON(data);
-                        for(var i = 0; i < e.length; i++) {                   
-                            users.push(e[i].username);
-                            credit.push(e[i].available_credits);
-                        }
-                        console.log(users);
-                        var ctx = document.getElementById("myBarChart");
-                            var myLineChart = new Chart(ctx, {
-                                      type: 'bar',
-                                      data: {
-                                        labels: users,
-                                        datasets: [{
-                                          label: "Credits",
-                                          backgroundColor: "rgba(2,117,216,1)",
-                                          borderColor: "rgba(2,117,216,1)",
-                                          data: credit,
-                                        }],
-                                      },
-                                      options: {
-                                        scales: {
-                                          xAxes: [{
-                                            ticks: {
-                                              maxTicksLimit: 6
-                                            }
-                                          }],
-                                          yAxes: [{
-                                            ticks: {
-                                              min: 0,
-                                              max: 1000,
-                                              maxTicksLimit: 5
-                                            },
-                                            gridLines: {
-                                              display: true
-                                            }
-                                          }],
-                                        },
-                                        legend: {
-                                          display: false
-                                        }
-                                      }
-                                    });
-                    }
-                });
-        });
-        
-    </script>
+     <script src="../vendor/chart.js/Chart.min.js"></script>
+    <script src="../assets/js/dashboard.controller.min.js"></script>
 </body>
 
 </html>

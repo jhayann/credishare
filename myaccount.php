@@ -28,7 +28,7 @@ if(isset($_GET['logout']))
     <meta name="description" content="">
     <meta name="author" content="">
      <link rel="icon" href="assets/images/pacman.ico">
-
+      <link rel="stylesheet" href="vendor/fontawesome-free/css/all.min.css">
     <title><?php echo $_SESSION['username']?></title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="assets/css/bootstrap.min.css">
@@ -100,6 +100,16 @@ if(isset($_GET['logout']))
             <p class="lead">This is your current credits. You  can see your transaction below.</p>
         </div>
     </div>
+    <div class="card mb-3">
+            <div class="card-header">
+            <i class="fas fa-chart-area"></i>
+              Topup history</div>
+            <div class="card-body">
+              <div id="chartnoti" class="alert alert-info">Plese wait. We're working on your topup history chart</div>
+              <canvas id="myAreaChart" width="100%" height="30"></canvas>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+          </div>
     <div id="history">
         <div class="alert alert-info">Plese wait. We're working on your records</div>
     </div>
@@ -111,38 +121,9 @@ if(isset($_GET['logout']))
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="assets/js/bootstrap.min.js"></script>
+    <script src="vendor/chart.js/Chart.min.js"></script>
     <script>
-        $(document).ready(function(){
-            var username = "<?php echo $_SESSION['username']?>";
-            $.ajax({
-                    type:"post",
-                    url:"core/mycredits.php",
-                    data:{action:"getcredits",user:username},
-                    success: function(response)  {
-                        $('#main_').html(response);
-                        getmyHistory(username);
-                    },
-                 error: function(){
-                        $('#notifier').removeClass('d-none');
-                 }
-            });
-        });
-        function getmyHistory(e)
-        {
-            var username = e;
-                 $.ajax({
-                    type:"post",
-                    url:"core/mycredits.php",
-                    data:{action:"gethistory",user:username},
-                    success: function(response)  {
-                        $('#history').html(response);   
-                    },
-                     error: function(){
-                        $('#notifier').removeClass('d-none');
-                 }
-                     
-            });
-        }
+            function getmyHistory(e){var t=e;$.ajax({type:"post",url:"core/mycredits.php",data:{action:"gethistory",user:t},success:function(e){$("#history").html(e)},error:function(){$("#notifier").removeClass("d-none")}})}$(document).ready(function(){var e="<?php echo $_SESSION['username']?>";$.ajax({type:"post",url:"core/mycredits.php",data:{action:"getcredits",user:e},success:function(t){$("#main_").html(t),getmyHistory(e)},error:function(){$("#notifier").removeClass("d-none")}}),Chart.defaults.global.defaultFontFamily='-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif',Chart.defaults.global.defaultFontColor="#292b2c",$.ajax({url:"core/chart.php",method:"POST",data:{action:"mychart",username:"<?php echo  $_SESSION['username']?>"},success:function(e){for(var t=[],o=[],a=$.parseJSON(e),r=0;r<a.length;r++)console.log(a[r].username),t.push(a[r].date),o.push(a[r].amount);var s=document.getElementById("myAreaChart");new Chart(s,{type:"line",data:{labels:t,datasets:[{label:"Amount",lineTension:.3,backgroundColor:"rgba(2,117,216,0.2)",borderColor:"rgba(2,117,216,1)",pointRadius:5,pointBackgroundColor:"rgba(2,117,216,1)",pointBorderColor:"rgba(255,255,255,0.8)",pointHoverRadius:5,pointHoverBackgroundColor:"rgba(2,117,216,1)",pointHitRadius:50,pointBorderWidth:2,data:o}]},options:{scales:{xAxes:[{time:{unit:"date"},gridLines:{display:!1},ticks:{maxTicksLimit:10}}],yAxes:[{ticks:{min:0,max:100,maxTicksLimit:10},gridLines:{color:"rgba(0, 0, 0, .125)"}}]},legend:{display:!1}}});$("#chartnoti").fadeOut("slow")}})});
     </script>
 </body>
 </html>

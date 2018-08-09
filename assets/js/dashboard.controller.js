@@ -102,7 +102,57 @@
             $('#users').focusout(function(){
                 $('#userlist').hide("slow");          
             });
-                   
+                           Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#292b2c';
+                      $.ajax({
+                    url:"../core/chart.php",
+                    method:"POST",
+                    data:{action:"users_chart"},
+                    success: function(data){
+                        var users = [];
+			             var credit = [];
+                        var e = $.parseJSON(data);
+                        for(var i = 0; i < e.length; i++) {       
+                            users.push(e[i].username);
+                            credit.push(e[i].available_credits);
+                        }                  
+                        var ctx = document.getElementById("myBarChart");
+                            var myLineChart = new Chart(ctx, {
+                                      type: 'bar',
+                                      data: {
+                                        labels: users,
+                                        datasets: [{
+                                          label: "Credits",
+                                          backgroundColor: "rgba(2,117,216,1)",
+                                          borderColor: "rgba(2,117,216,1)",
+                                          data: credit,
+                                        }],
+                                      },
+                                      options: {
+                                        scales: {
+                                          xAxes: [{
+                                            ticks: {
+                                              maxTicksLimit: 6
+                                            }
+                                          }],
+                                          yAxes: [{
+                                            ticks: {
+                                              min: 0,
+                                              max: 1000,
+                                              maxTicksLimit: 5
+                                            },
+                                            gridLines: {
+                                              display: true
+                                            }
+                                          }],
+                                        },
+                                        legend: {
+                                          display: false
+                                        }
+                                      }
+                                    });
+                    }
+                });
         });   
        function thisFunction(e)
         {
