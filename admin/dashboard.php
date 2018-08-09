@@ -205,14 +205,24 @@ if(isset($_GET['logout']))
         </h1>
 
 
-        <div class="card">
-            <h4 class="card-header">Control Panel * Admin - <?php echo $_SESSION['username']?></h4>
-            <div class="card-body" id="main_panel">
-               <div class="notifier"></div>
-                
+<div class="card">
+    <h4 class="card-header">Control Panel * Admin -
+        <?php echo $_SESSION['username']?>
+    </h4>
+    <div class="card-body" id="main_panel">
+        <div class="notifier"></div>
+        <div class="col-lg-11">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar"></i>Users with most credits</div>
+                <div class="card-body">
+                    <canvas id="myBarChart" width="100%" height="50"></canvas>
+                </div>
+                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
             </div>
-           
         </div>
+    </div>
+</div>
     </div>
     <!-- Main Col END -->
 </div>
@@ -260,6 +270,64 @@ if(isset($_GET['logout']))
     <script src="../assets/js/bootstrap.min.js"></script>
     <script src="../assets/js/app.js"></script>
     <script src="../assets/js/dashboard.controller.js"></script>
+    <script src="../vendor/chart.js/Chart.min.js"></script>
+    <script>
+        Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+Chart.defaults.global.defaultFontColor = '#292b2c';
+        $(document).ready(function(){
+                $.ajax({
+                    url:"../core/chart.php",
+                    method:"POST",
+                    data:{action:"users_chart"},
+                    success: function(data){
+                        var users = [];
+			             var credit = [];
+                        var e = $.parseJSON(data);
+                        for(var i = 0; i < e.length; i++) {                   
+                            users.push(e[i].username);
+                            credit.push(e[i].available_credits);
+                        }
+                        console.log(users);
+                        var ctx = document.getElementById("myBarChart");
+                            var myLineChart = new Chart(ctx, {
+                                      type: 'bar',
+                                      data: {
+                                        labels: users,
+                                        datasets: [{
+                                          label: "Credits",
+                                          backgroundColor: "rgba(2,117,216,1)",
+                                          borderColor: "rgba(2,117,216,1)",
+                                          data: credit,
+                                        }],
+                                      },
+                                      options: {
+                                        scales: {
+                                          xAxes: [{
+                                            ticks: {
+                                              maxTicksLimit: 6
+                                            }
+                                          }],
+                                          yAxes: [{
+                                            ticks: {
+                                              min: 0,
+                                              max: 1000,
+                                              maxTicksLimit: 5
+                                            },
+                                            gridLines: {
+                                              display: true
+                                            }
+                                          }],
+                                        },
+                                        legend: {
+                                          display: false
+                                        }
+                                      }
+                                    });
+                    }
+                });
+        });
+        
+    </script>
 </body>
 
 </html>

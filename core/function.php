@@ -309,6 +309,17 @@ function approve_user($username)
         usersList("New account for $username has been activated.","success");
     }
 }
+function users_chart()
+{
+    $q = sprintf("SELECT username, available_credits FROM credits ORDER by available_credits DESC LIMIT 0,5 ");
+    $results = $GLOBALS['db']->query($q);
+    $data = array();
+    foreach ($results as $row) {
+        $data[] = $row;
+        }
+   print json_encode($data);
+    $GLOBALS['db']->close();
+}
 
 
 ?>			
