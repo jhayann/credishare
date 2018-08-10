@@ -92,7 +92,7 @@ if(isset($_GET['logout']))
     </nav>
 <div class="row" id="body-row">
     <!-- Sidebar -->
-    <div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
+    <div id="sidebar-container" class="sidebar-expanded d-none d-md-inline">
         <!-- d-* hiddens the Sidebar in smaller devices. Its itens can be kept on the Navbar 'Menu' -->
         <!-- Bootstrap List Group -->
         <ul class="list-group">
@@ -197,7 +197,7 @@ if(isset($_GET['logout']))
     <!-- sidebar-container END -->
 
     <!-- MAIN -->
-    <div class="col" style="max-width:80%">
+    <div class="col-md-9 d-sm-block" >
 
         <h1>
             CrediShare
@@ -205,7 +205,7 @@ if(isset($_GET['logout']))
         </h1>
 
 
-<div class="card">
+<div class="card" style=" overflow-x: auto;">
     <h4 class="card-header">Control Panel * Admin -
         <?php echo $_SESSION['username']?>
     </h4>
@@ -271,6 +271,7 @@ if(isset($_GET['logout']))
     <script src="../assets/js/app.js"></script>
      <script src="../vendor/chart.js/Chart.min.js"></script>
     <script src="../assets/js/dashboard.controller.min.js"></script>
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 </body>
 
 </html>
