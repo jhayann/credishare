@@ -209,8 +209,8 @@ if(isset($_GET['logout']))
     <h4 class="card-header">Control Panel * Admin -
         <?php echo $_SESSION['username']?>
     </h4>
+      <div class="notifier"></div>
     <div class="card-body" id="main_panel">
-        <div class="notifier"></div>
         <div class="d-block">
             <div class="card mb-3">
                 <div class="card-header">

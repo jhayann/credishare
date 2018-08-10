@@ -5,7 +5,7 @@ $db = $database->getConnection();
 function getrecords($message,$type=null)
 {
         $response_data="";
-        $get = $GLOBALS['db']->prepare("SELECT * FROM credits");
+        $get = $GLOBALS['db']->prepare("SELECT * FROM credits ORDER BY last_added DESC LIMIT 0, 20 ");
         $get->execute();
         $result = $get->get_result();
             while($r=$result->fetch_array()) 
@@ -42,11 +42,11 @@ function getrecords($message,$type=null)
     $result->free_result();
      $GLOBALS['db']->close();
 }
-function usersList($message,$type=null)
+function usersList($message,$type=null) // get users for approval
 {
         $count=0;
         $response_data="";
-        $get = $GLOBALS['db']->prepare("SELECT username, account_no,email,approved,created_at FROM users WHERE approved = false");
+        $get = $GLOBALS['db']->prepare("SELECT username, account_no,email,approved,created_at FROM users WHERE approved = false LIMIT 0,10");
         $get->execute();
         $result = $get->get_result();
             while($r=$result->fetch_array()) 
@@ -114,7 +114,7 @@ function getmyHistory($user)
 {
     $count=0;
         $response_data="";
-        $get = $GLOBALS['db']->prepare("SELECT * FROM topup_history WHERE username = ?");
+        $get = $GLOBALS['db']->prepare("SELECT * FROM topup_history WHERE username = ? LIMIT 0,10");
         $get->bind_param("s",$user);
         $get->execute();
         $result = $get->get_result();
@@ -151,7 +151,7 @@ function getmyHistory($user)
 function getHistory()
 {
         $response_data="";
-        $get = $GLOBALS['db']->prepare("SELECT * FROM topup_history");
+        $get = $GLOBALS['db']->prepare("SELECT * FROM topup_history LIMIT 0,10");
         $get->execute();
         $result = $get->get_result();
             while($r=$result->fetch_array()) 
