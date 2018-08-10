@@ -114,7 +114,7 @@ function getmyHistory($user)
 {
     $count=0;
         $response_data="";
-        $get = $GLOBALS['db']->prepare("SELECT * FROM topup_history WHERE username = ? LIMIT 0,10");
+        $get = $GLOBALS['db']->prepare("SELECT * FROM topup_history WHERE username = ? LIMIT 0,100");
         $get->bind_param("s",$user);
         $get->execute();
         $result = $get->get_result();
@@ -131,7 +131,7 @@ function getmyHistory($user)
     if($count<=0){
         $response_data = '<tr><td colspan="4"> <div class="alert alert-warning">NO RECORDS FOUND </div></td></tr>';
     }
-        $response ="";
+       /* $response ="";
         $response = $response .'
                     <table class="table">
                      <thead class="thead-light">
@@ -143,8 +143,8 @@ function getmyHistory($user)
                       </thead>
                       ';
         $response .= $response_data;
-        $response .= '</table>';
-        echo $response;  
+        $response .= '</table>';*/
+        echo $response_data;  
     $result->free_result();
      $GLOBALS['db']->close();
 }
